@@ -77,10 +77,10 @@ Results are saved in `results/non-200-responses.json` and `results/network-failu
 ```
 [
   {
-    "url": "https://www.standuptocancer.org.uk/sites/default/files/downloadable_quiz_pack.pdf?_rsc=5wyb7",
+    "url": "https://example.com/sites/default/files/downloadable_test_pack.pdf?",
     "status": 403,
     "resourceType": "fetch",
-    "initiatingPage": "https://standuptocancer.org.uk/quiz"
+    "initiatingPage": "https://example.com/test"
   }
 ]
 ```
