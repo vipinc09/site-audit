@@ -1,4 +1,4 @@
-import SiteChecker from "../src/siteChecker";
+import SiteChecker from "sitemap-audit";
 import { test, chromium } from "@playwright/test"; // Note the correct import
 
 const checker = new SiteChecker();

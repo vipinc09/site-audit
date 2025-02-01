@@ -1,6 +1,6 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {},
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/vipin209/site-audit/issues"
   },
-  "homepage": "https://github.com/vipin209/site-audit#readme"
+  "homepage": "https://github.com/vipin209/site-audit#readme",
+  "dependencies": {
+    "sitemap-audit": "^1.0.1"
+  }
 }
