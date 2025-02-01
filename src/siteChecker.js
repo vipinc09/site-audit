@@ -218,4 +218,4 @@ class SiteChecker {
   }
 }
 
-export default LinkChecker;
+export default SiteChecker;
