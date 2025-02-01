@@ -29,7 +29,7 @@ class Semaphore {
   }
 }
 
-class LinkChecker {
+class SiteChecker {
   constructor(config = {}) {
     this.config = {
       resultsFolder: path.join(process.cwd(), "test-results"),

@@ -1,7 +1,7 @@
-import LinkChecker from "../src/siteChecker";
+import SiteChecker from "../src/siteChecker";
 import { test, chromium } from "@playwright/test"; // Note the correct import
 
-const checker = new LinkChecker();
+const checker = new SiteChecker();
 
 test("Validate and monitor sitemap URLs", async () => {
   test.setTimeout(40000_00);
