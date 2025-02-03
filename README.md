@@ -51,13 +51,31 @@ You can modify the configuration in `index.js` or pass values via environment va
 
 ### **1️⃣ Checking URLs from a Sitemap**
 
-To check for **400+ HTTP errors**, modify `index.js` and call:
+To check for **400+ HTTP errors**, using playwright refer to the below example:
 
 ```js
-const checker = new LinkChecker();
-checker
-  .fetchAndSplitUrls("https://example.com/sitemap.xml")
-  .then((urls) => checker.checkUrlStatus(urls));
+import SiteChecker from "sitemap-audit";
+import { test, chromium } from "@playwright/test";
+
+const checker = new SiteChecker();
+
+test("Validate and monitor sitemap URLs", async () => {
+  test.setTimeout(40000_00); // Provide timeout only if the amount of urls being checked is greater than 200
+  const browser = await chromium.launch();
+  const context = await browser.newContext();
+
+  // Generate urls from the sitemap.xml
+  const urls = await checker.fetchAndSplitUrls(
+    "https://example.com/sitemap.xml"
+  );
+
+  // Check URL statuses
+  await checker.checkUrlStatus(urls);
+
+  // Monitor network requests
+  await checker.checkAllNetworkRequests(context, urls.slice(0, 20));
+  await browser.close();
+});
 ```
 
 💾 **Output:**  

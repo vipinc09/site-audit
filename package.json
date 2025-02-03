@@ -1,8 +1,10 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.2",
-  "description": "",
+  "version": "1.0.3",
+  "description": "Comprehensive sitemap auditing tool for website health checks, featuring HTTP status verification, broken link detection, and network request monitoring. Supports playwright .",
   "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
   "scripts": {},
   "repository": {
     "type": "git",
@@ -14,14 +16,21 @@
     "axios": "^1.7.9",
     "xml2js": "^0.6.2"
   },
-  "keywords": [],
+  "keywords": [
+    "sitemap",
+    "automation",
+    "testing",
+    "audit",
+    "website-health",
+    "broken-links",
+    "playwright",
+    "seo",
+    "monitoring"
+  ],
   "author": "Vipin Cheruvallil",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/vipin209/site-audit/issues"
   },
-  "homepage": "https://github.com/vipin209/site-audit#readme",
-  "dependencies": {
-    "sitemap-audit": "^1.0.1"
-  }
+  "homepage": "https://github.com/vipin209/site-audit#readme"
 }
