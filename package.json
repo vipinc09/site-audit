@@ -1,16 +1,28 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.7",
-  "description": "Comprehensive sitemap auditing tool for website health checks, featuring HTTP status verification, broken link detection, and network request monitoring. Supports Playwright.",
-  "type": "module",
-  "main": "index.cjs",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "version": "1.0.8",
+  "description": "Comprehensive sitemap auditor for website health checks",
+  "main": "./index.cjs",
+  "module": "./index.js",
+  "types": "./index.d.ts",
   "exports": {
-    "import": "./index.js",
-    "require": "./index.cjs"
+    ".": {
+      "import": "./index.js",
+      "require": "./index.cjs"
+    }
   },
-  "scripts": {},
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "index.js",
+    "index.cjs",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vipin209/site-audit.git"
