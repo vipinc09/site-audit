@@ -1,10 +1,9 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Comprehensive sitemap auditing tool for website health checks, featuring HTTP status verification, broken link detection, and network request monitoring. Supports playwright .",
   "main": "index.js",
   "types": "index.d.ts",
-  "type": "module",
   "scripts": {},
   "repository": {
     "type": "git",
@@ -17,8 +16,8 @@
     "xml2js": "^0.6.2"
   },
   "keywords": [
+    "tdd",
     "sitemap",
-    "automation",
     "testing",
     "audit",
     "website-health",
