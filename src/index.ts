@@ -1,16 +1,48 @@
 import { parseStringPromise } from "xml2js";
 import { promises as fs } from "fs";
-import axios from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import path from "path";
 
+// Interface for Semaphore configuration
+interface SemaphoreConfig {
+  maxConcurrent: number;
+}
+
+// Interface for SiteChecker configuration
+interface SiteCheckerConfig {
+  resultsFolder?: string;
+  batchSize?: number;
+  maxConnections?: number;
+}
+
+// Interface for URL status response
+interface UrlStatus {
+  url: string;
+  status: number | "error";
+  error?: string;
+}
+
+// Interface for network failure response
+interface NetworkFailure {
+  url: string;
+  status: number;
+  resourceType: string;
+  initiatingPage: string;
+}
+
+// Semaphore class with TypeScript types
 class Semaphore {
-  constructor(maxConcurrent) {
+  private maxConcurrent: number;
+  private current: number;
+  private queue: Array<(release: () => void) => void>;
+
+  constructor(maxConcurrent: number) {
     this.maxConcurrent = maxConcurrent;
     this.current = 0;
     this.queue = [];
   }
 
-  async acquire() {
+  async acquire(): Promise<() => void> {
     if (this.current < this.maxConcurrent) {
       this.current++;
       return this.release.bind(this);
@@ -19,18 +51,26 @@ class Semaphore {
     return new Promise((resolve) => this.queue.push(resolve));
   }
 
-  release() {
+  release(): void {
     this.current--;
     if (this.queue.length > 0) {
       const next = this.queue.shift();
-      this.current++;
-      next(this.release.bind(this));
+      if (next) {
+        this.current++;
+        next(this.release.bind(this));
+      }
     }
   }
 }
 
+// SiteChecker class with TypeScript types
 class SiteChecker {
-  constructor(config = {}) {
+  private config: Required<SiteCheckerConfig>;
+  private non200Responses: UrlStatus[];
+  private logQueue: Record<string, string[]>;
+  private writePending: boolean;
+
+  constructor(config: SiteCheckerConfig = {}) {
     this.config = {
       resultsFolder: path.join(process.cwd(), "test-results"),
       batchSize: 20,
@@ -42,33 +82,32 @@ class SiteChecker {
     this.writePending = false;
   }
 
-  async flushWrites() {
+  async flushWrites(): Promise<void> {
     if (this.writePending) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
     }
   }
 
-  async ensureResultsFolder() {
+  async ensureResultsFolder(): Promise<void> {
     try {
       await fs.mkdir(this.config.resultsFolder, { recursive: true });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating results folder:", error.message);
     }
   }
 
-  async batchWriter(fileName, data) {
+  async batchWriter(fileName: string, data: string): Promise<void> {
     await this.ensureResultsFolder();
     const filePath = path.join(this.config.resultsFolder, fileName);
 
     try {
-      // Append new data instead of overwriting it each time
       await fs.appendFile(filePath, data + "\n", "utf8");
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error writing to ${fileName}:`, error.message);
     }
   }
 
-  async fetchAndSplitUrls(sitemapUrl) {
+  async fetchAndSplitUrls(sitemapUrl: string): Promise<string[]> {
     try {
       const response = await axios.get(sitemapUrl);
       const result = await parseStringPromise(response.data);
@@ -77,35 +116,37 @@ class SiteChecker {
         throw new Error("Invalid sitemap format.");
       }
 
-      const urls = result.urlset.url.map((url) => url.loc[0]);
+      const urls = result.urlset.url.map((url: any) => url.loc[0]);
       console.log(`✅ Total URLs found in sitemap: ${urls.length}`);
       return urls;
-    } catch (err) {
+    } catch (err: any) {
       console.error("❌ Error fetching or parsing sitemap:", err.message);
       return [];
     }
   }
 
-  async checkUrlStatus(urls) {
+  async checkUrlStatus(urls: string[]): Promise<void> {
     await this.ensureResultsFolder();
-    const http = axios.create({
+    const http: AxiosInstance = axios.create({
       maxRedirects: 5,
       timeout: 10000,
       maxContentLength: 50 * 1000 * 1000,
     });
 
-    const errorResponses = []; // Store only 400+ status codes
+    const errorResponses: UrlStatus[] = [];
     const semaphore = new Semaphore(this.config.maxConnections);
 
-    const processUrl = async (url) => {
+    const processUrl = async (url: string): Promise<void> => {
       const release = await semaphore.acquire();
       try {
-        const response = await http.get(url, { validateStatus: () => true });
+        const response: AxiosResponse = await http.get(url, {
+          validateStatus: () => true,
+        });
 
         if (response.status >= 400) {
           errorResponses.push({ url, status: response.status });
         }
-      } catch (err) {
+      } catch (err: any) {
         errorResponses.push({ url, status: "error", error: err.message });
         console.error(`❌ Failed to check ${url}:`, err.message);
       } finally {
@@ -115,7 +156,6 @@ class SiteChecker {
 
     await Promise.all(urls.map((url) => processUrl(url)));
 
-    // ✅ Write only 400+ errors to JSON at the end
     const filePath = path.join(
       this.config.resultsFolder,
       "non-200-responses.json"
@@ -128,12 +168,15 @@ class SiteChecker {
     console.log(`✅ Non-200 responses saved to ${filePath}`);
   }
 
-  async checkPageNetworkRequests(context, url) {
+  async checkPageNetworkRequests(
+    context: any,
+    url: string
+  ): Promise<NetworkFailure[]> {
     const page = await context.newPage();
-    const failures = [];
+    const failures: NetworkFailure[] = [];
     let scrollAttempts = 0;
 
-    page.on("response", (response) => {
+    page.on("response", (response: any) => {
       if (response.status() >= 400) {
         failures.push({
           url: response.url(),
@@ -147,10 +190,9 @@ class SiteChecker {
     try {
       await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
 
-      // Auto-scroll implementation
-      const autoScroll = async () => {
+      const autoScroll = async (): Promise<void> => {
         await page.evaluate(async () => {
-          await new Promise((resolve) => {
+          await new Promise<void>((resolve) => {
             let totalHeight = 0;
             const distance = 500;
             const timer = setInterval(() => {
@@ -160,7 +202,7 @@ class SiteChecker {
 
               if (totalHeight >= scrollHeight) {
                 clearInterval(timer);
-                resolve();
+                resolve(); // Now properly typed
               }
             }, 200);
           });
@@ -174,7 +216,7 @@ class SiteChecker {
       }
 
       await page.waitForTimeout(5000);
-    } catch (error) {
+    } catch (error: any) {
       console.error(`❌ Error processing ${url}:`, error.message);
     } finally {
       await page.close().catch(() => {});
@@ -183,10 +225,10 @@ class SiteChecker {
     return failures;
   }
 
-  async checkAllNetworkRequests(context, urls) {
-    const allFailures = [];
+  async checkAllNetworkRequests(context: any, urls: string[]): Promise<void> {
+    const allFailures: NetworkFailure[] = [];
     const semaphore = new Semaphore(this.config.maxConnections);
-    const seenUrls = new Set();
+    const seenUrls = new Set<string>();
 
     await Promise.all(
       urls.map(async (url) => {
@@ -217,5 +259,6 @@ class SiteChecker {
     console.log(`✅ Network failures saved to ${filePath}`);
   }
 }
+
 export { SiteChecker };
 export default SiteChecker;

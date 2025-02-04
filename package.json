@@ -1,39 +1,37 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Comprehensive sitemap auditor for website health checks",
-  "main": "./index.cjs",
-  "module": "./index.js",
-  "types": "./index.d.ts",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/generate-cjs.js",
     "prepare": "npm run build"
-  },
-  "files": [
-    "index.js",
-    "index.cjs",
-    "index.d.ts"
-  ],
-  "engines": {
-    "node": ">=14.0.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vipin209/site-audit.git"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "axios": "^1.7.9",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.0",
-    "@types/node": "^22.12.0"
+    "@types/node": "^22.12.0",
+    "@types/xml2js": "^0.4.14",
+    "typescript": "^5.7.3"
   },
   "keywords": [
     "tdd",
@@ -51,5 +49,8 @@
   "bugs": {
     "url": "https://github.com/vipin209/site-audit/issues"
   },
-  "homepage": "https://github.com/vipin209/site-audit#readme"
+  "homepage": "https://github.com/vipin209/site-audit#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }
