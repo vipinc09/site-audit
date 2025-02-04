@@ -1,6 +1,6 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Comprehensive sitemap auditing tool for website health checks, featuring HTTP status verification, broken link detection, and network request monitoring. Supports Playwright.",
   "type": "module",
   "main": "index.js",
