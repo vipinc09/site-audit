@@ -1,3 +1,3 @@
-const SiteChecker = require("./src/siteChecker.js");
+const SiteChecker = require("./index.js");
 
 module.exports = { SiteChecker, default: SiteChecker };
