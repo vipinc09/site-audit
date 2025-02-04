@@ -1,39 +1,32 @@
 # 🔗 Sitemap-Audit
 
-A **Node.js** tool for checking URLs from a sitemap, detecting broken links, and monitoring network requests.
+A **Node.js** solution for auditing website health through sitemap analysis. Designed for SEO audits, broken link detection, and network request monitoring in Playwright, Selenium, and Cypress test environments.
 
 ## 🚀 Features
 
-- **Sitemap Parsing**: Extracts all URLs from a given XML sitemap.
-- **HTTP Status Checking**: Identifies URLs returning **400+ errors**.
-- **Network Request Monitoring**: Detects failed network requests on loaded pages.
-- **Concurrent Requests**: Uses a **semaphore** to limit concurrent connections.
-- **JSON Reports**: Saves results in structured JSON files.
+- **🔍 Sitemap Analysis**: - Extract and validate URLs from XML sitemaps
+- **🚨 Error Detection**: - Identify 400+ HTTP status codes and network failures
+- **⚡ Concurrent Processing**: - Smart semaphore-based request throttling
+- **📊 JSON Reporting**: - Structured output for CI/CD integration
+- **🌐 Cross-Platform Support**: - Works with Playwright, Selenium & Cypress
+- **🔄 Auto-Scroll Simulation**: - Trigger dynamic content loading
+- **🔧 Configurable Thresholds**: - Customize batch sizes and connection limits
 
 ---
 
-## 🛠️ Installation
+## 📦 Installation
 
 ### **1️⃣ Clone the Repository**
 
 ```sh
-git clone https://github.com/your-username/link-checker.git
-cd link-checker
+npm install sitemap-audit
 ```
 
-### **2️⃣ Install Dependencies**
+Peer Dependencies (install as needed):
 
 ```sh
-npm install
+npm install playwright
 ```
-
-### **3️⃣ Run the Link Checker**
-
-```sh
-node index.js
-```
-
----
 
 ## ⚙️ Configuration
 
@@ -78,7 +71,8 @@ test("Validate and monitor sitemap URLs", async () => {
 });
 ```
 
-💾 **Output:**  
+# 💾 Output Structure:
+
 Results are saved in `results/non-200-responses.json` and `results/network-failures.json`.
 
 `results/non-200-responses.json` would be save in the following format
@@ -102,3 +96,56 @@ Results are saved in `results/non-200-responses.json` and `results/network-failu
   }
 ]
 ```
+
+# 📚 API Reference:
+
+```js
+fetchAndSplitUrls(sitemapUrl: string): Promise<string[]>
+```
+
+- Fetches and parses sitemap XML
+- Returns array of validated URLs
+
+```js
+checkUrlStatus(urls: string[]): Promise<void>
+```
+
+- Checks HTTP status codes for URLs
+- Saves results to non-200-responses.json
+
+```js
+checkAllNetworkRequests(context: BrowserContext, urls: string[]): Promise<void>
+```
+
+- Analyzes network requests during page loads
+- Saves resource failures to network-failures.json
+
+# 🚨 Troubleshooting\*\*
+
+**Common Issues:**
+
+Missing Dependencies: Ensure required browsers drivers are installed
+
+```sh
+npm install playwright
+```
+
+Timeout Errors: Increase test timeout for large sitemaps
+
+```js
+test.setTimeout(120000); // 2-minute timeout
+```
+
+# 🤝 Contributing
+
+Pull requests welcome! Please follow:
+
+- Create feature branch from main
+- Include test coverage
+- Update documentation
+
+# 📄 License
+
+MIT © Vipin Cheruvallil
+
+For detailed implementation examples and issue tracking, visit our [GitHub Repository](https://github.com/vipinc09/site-audit).

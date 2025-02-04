@@ -1,6 +1,6 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Comprehensive sitemap auditor for website health checks",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -12,10 +12,7 @@
       "require": "./dist/index.cjs"
     }
   },
-  "scripts": {
-    "build": "tsc && node scripts/generate-cjs.js",
-    "prepare": "npm run build"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vipin209/site-audit.git"
