@@ -1,4 +1,3 @@
-// index.d.ts
 declare module "sitemap-audit" {
   import { BrowserContext } from "playwright";
   import { Builder } from "selenium-webdriver";
@@ -46,5 +45,6 @@ declare module "sitemap-audit" {
     ): Promise<void>;
   }
 
+  export { SiteChecker };
   export default SiteChecker;
 }

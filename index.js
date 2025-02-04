@@ -217,5 +217,5 @@ class SiteChecker {
     console.log(`✅ Network failures saved to ${filePath}`);
   }
 }
-
+export { SiteChecker };
 export default SiteChecker;
