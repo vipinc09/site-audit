@@ -2,7 +2,7 @@
 
 A **Node.js** solution for auditing website health through sitemap analysis. Designed for SEO audits, broken link detection, and network request monitoring in Playwright, Selenium, and Cypress test environments.
 
-## 🚀 Features
+## Features
 
 - **🔍 Sitemap Analysis**: - Extract and validate URLs from XML sitemaps
 - **🚨 Error Detection**: - Identify 400+ HTTP status codes and network failures
@@ -40,7 +40,7 @@ You can modify the configuration in `index.js` or pass values via environment va
 
 ---
 
-## 📌 Usage
+## Usage
 
 ### **1️⃣ Checking URLs from a Sitemap**
 
@@ -120,7 +120,7 @@ checkAllNetworkRequests(context: BrowserContext, urls: string[]): Promise<void>
 - Analyzes network requests during page loads
 - Saves resource failures to network-failures.json
 
-# 🚨 Troubleshooting
+# Troubleshooting
 
 **Common Issues:**
 
