@@ -1,4 +1,4 @@
-# 🔗 Sitemap-Audit
+# Sitemap-Audit
 
 A **Node.js** solution for auditing website health through sitemap analysis. Designed for SEO audits, broken link detection, and network request monitoring in Playwright, Selenium, and Cypress test environments.
 
@@ -120,7 +120,7 @@ checkAllNetworkRequests(context: BrowserContext, urls: string[]): Promise<void>
 - Analyzes network requests during page loads
 - Saves resource failures to network-failures.json
 
-# 🚨 Troubleshooting\*\*
+# 🚨 Troubleshooting
 
 **Common Issues:**
 
