@@ -25,9 +25,10 @@ interface UrlStatus {
 // Interface for network failure response
 interface NetworkFailure {
   url: string;
-  status: number;
+  status: number | "blocked"; // Updated to include 'blocked' status
   resourceType: string;
   initiatingPage: string;
+  error?: string; // Added to capture error messages
 }
 
 // Semaphore class with TypeScript types
@@ -176,6 +177,24 @@ class SiteChecker {
     const failures: NetworkFailure[] = [];
     let scrollAttempts = 0;
 
+    // Capture failed requests (including ORB errors)
+    page.on("requestfailed", (request: any) => {
+      const failureUrl = request.url();
+      const failureError = request.failure()?.errorText || "Unknown error";
+
+      // Check if the error is ORB-related
+      if (failureError.includes("ERR_BLOCKED_BY_ORB")) {
+        failures.push({
+          url: failureUrl,
+          status: "blocked",
+          resourceType: request.resourceType(),
+          initiatingPage: url,
+          error: failureError,
+        });
+      }
+    });
+
+    // Capture non-200 responses
     page.on("response", (response: any) => {
       if (response.status() >= 400) {
         failures.push({
@@ -190,6 +209,7 @@ class SiteChecker {
     try {
       await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
 
+      // Auto-scroll implementation
       const autoScroll = async (): Promise<void> => {
         await page.evaluate(async () => {
           await new Promise<void>((resolve) => {
@@ -202,7 +222,7 @@ class SiteChecker {
 
               if (totalHeight >= scrollHeight) {
                 clearInterval(timer);
-                resolve(); // Now properly typed
+                resolve();
               }
             }, 200);
           });

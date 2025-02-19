@@ -132,6 +132,20 @@ class SiteChecker {
     const page = await context.newPage();
     const failures = [];
     let scrollAttempts = 0;
+    page.on("requestfailed", (request) => {
+      const failureUrl = request.url();
+      const failureError = request.failure()?.errorText || "Unknown error";
+      // Check if the error is ORB-related
+      if (failureError.includes("ERR_BLOCKED_BY_ORB")) {
+        failures.push({
+          url: failureUrl,
+          status: "blocked",
+          resourceType: request.resourceType(),
+          initiatingPage: url,
+          error: failureError,
+        });
+      }
+    });
     page.on("response", (response) => {
       if (response.status() >= 400) {
         failures.push({

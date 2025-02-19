@@ -1,6 +1,6 @@
 # Sitemap-Audit
 
-A **Node.js** solution for auditing website health through sitemap analysis. Designed for SEO audits, broken link detection, and network request monitoring in Playwright, Selenium, and Cypress test environments.
+A **Node.js** solution for auditing website health through sitemap analysis. It's designed for SEO audits, identifying broken links, and detecting network errors, including ERR_BLOCKED_BY_ORB requests, leveraging Playwright for browser automation.
 
 ## Features
 
@@ -8,7 +8,7 @@ A **Node.js** solution for auditing website health through sitemap analysis. Des
 - **🚨 Error Detection**: - Identify 400+ HTTP status codes and network failures
 - **⚡ Concurrent Processing**: - Smart semaphore-based request throttling
 - **📊 JSON Reporting**: - Structured output for CI/CD integration
-- **🌐 Cross-Platform Support**: - Works with Playwright, Selenium & Cypress
+- **🌐 Cross-Platform Support**: - Works with Playwright.
 - **🔄 Auto-Scroll Simulation**: - Trigger dynamic content loading
 - **🔧 Configurable Thresholds**: - Customize batch sizes and connection limits
 
