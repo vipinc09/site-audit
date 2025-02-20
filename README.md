@@ -1,6 +1,6 @@
 # Sitemap-Audit
 
-A **Node.js** solution for auditing website health through sitemap analysis. It's designed for SEO audits, identifying broken links, and detecting network errors, including ERR_BLOCKED_BY_ORB requests, leveraging Playwright for browser automation.
+A **Node.js** solution for auditing website health through sitemap analysis. It's designed for SEO audits, identifying broken links, and detecting network errors, including blocked network requests, leveraging Playwright for browser automation.
 
 ## Features
 

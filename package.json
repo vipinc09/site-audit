@@ -1,6 +1,6 @@
 {
   "name": "sitemap-audit",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Comprehensive sitemap auditor for website health checks",
   "type": "module",
   "main": "./dist/index.cjs",
