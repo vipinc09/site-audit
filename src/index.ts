@@ -183,7 +183,7 @@ class SiteChecker {
       const failureError = request.failure()?.errorText || "Unknown error";
 
       // Check if the error is ORB-related
-      if (failureError.includes("ERR_BLOCKED_BY_ORB")) {
+      if (failureError) {
         failures.push({
           url: failureUrl,
           status: "blocked",
